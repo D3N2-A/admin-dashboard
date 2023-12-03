@@ -207,14 +207,14 @@ function TableMain({
                                     ...prev,
                                     [page]: [
                                       ...(prev[page] ? prev[page] : []),
-                                      value?.username,
+                                      value?.id,
                                     ],
                                   };
                                 });
                               } else {
-                                setselected_users((prev) => {
+                                setSelectedUsers((prev) => {
                                   const filtered = prev[page].filter(
-                                    (name) => name !== value.username
+                                    (name) => name !== value.id
                                   );
                                   return { ...prev, [page]: filtered };
                                 });

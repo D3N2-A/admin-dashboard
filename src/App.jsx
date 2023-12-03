@@ -6,6 +6,7 @@ import { TablePagination } from "@mui/material";
 
 function App() {
   const [data, setData] = useState([]);
+  const [masterData, setMasterData] = useState([]);
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function App() {
         }
         const fetchedData = await response.json();
         setData(fetchedData);
-        console.log(fetchedData);
+        setMasterData(fetchedData);
       } catch (error) {
         console.log(error);
       } finally {
@@ -60,6 +61,30 @@ function App() {
     });
   };
 
+  // Search Handelind
+  const [searchValue, setSearchValue] = useState("");
+  const searchHandler = (e) => {
+    let searchVal = searchValue;
+    if (searchVal === "" || searchVal === " ") {
+      setData(masterData);
+      return;
+    }
+
+    searchVal = searchVal.toLowerCase();
+    let temp = [...data];
+    temp = temp.filter(
+      (x) =>
+        x?.id.toLowerCase().includes(searchVal) ||
+        x?.name.toLowerCase().includes(searchVal) ||
+        x?.email.toLowerCase().includes(searchVal) ||
+        x?.role.toLowerCase().includes(searchVal)
+    );
+
+    setData((prev) => {
+      return temp;
+    });
+  };
+
   return (
     <>
       <div className="container">
@@ -67,7 +92,16 @@ function App() {
           <input
             type="text"
             name=""
-            placeholder="Search..."
+            value={searchValue}
+            placeholder="Search and Press Enter to submit..."
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                searchHandler(e.target.value);
+              }
+            }}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
             className="search"
             id=""
           />
