@@ -46,8 +46,19 @@ function App() {
     setPage(0);
   };
 
-  // Selection and Deleteion
+  // Selected Users Management
   const [selectedUsers, setSelectedUsers] = useState({});
+  const deleteHandler = () => {
+    let temp = [...data];
+    for (let page in selectedUsers) {
+      temp = temp.filter((x) => !selectedUsers[page].includes(x?.id));
+      console.log(temp);
+    }
+
+    setData((prev) => {
+      return temp;
+    });
+  };
 
   return (
     <>
@@ -64,6 +75,10 @@ function App() {
           <span
             className="icon-container red"
             style={{ background: "#FF6969" }}
+            id="delete-main"
+            onClick={() => {
+              deleteHandler();
+            }}
           >
             <AiOutlineDelete color="white" />
           </span>
