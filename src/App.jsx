@@ -1,12 +1,34 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import { AiOutlineDelete } from "react-icons/ai";
+import TableMain from "./Components/Table";
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [data, setData] = useState();
+  const [fetching, setFetching] = useState(false);
+  return (
+    <>
+      <div className="container">
+        <div className="first">
+          <input
+            type="text"
+            name=""
+            placeholder="Enter Value..."
+            className="search"
+            id=""
+          />
 
-  return <>Hello</>;
+          <span
+            className="icon-container red"
+            style={{ background: "#FF6969" }}
+          >
+            <AiOutlineDelete color="white" />
+          </span>
+        </div>
+        <TableMain />
+      </div>
+    </>
+  );
 }
 
 export default App;
