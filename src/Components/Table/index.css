@@ -1,0 +1,23 @@
+.icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon-container {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  outline: 1px solid var(--secondary);
+}
+
+.icon-container:hover {
+  background-color: var(--grey) !important;
+}

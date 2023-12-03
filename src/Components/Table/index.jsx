@@ -3,14 +3,25 @@ import {
   CircularProgress,
   Paper,
   Table,
+  TableBody,
   TableContainer,
   TableHead,
   TableRow,
 } from "@mui/material";
 import React from "react";
 import { StyledTableCell, StyledTableRow } from "../../Utils/MaterialUi";
+import { FiEdit } from "react-icons/fi";
+import "./index.css";
+import { AiOutlineDelete } from "react-icons/ai";
 
-function TableMain({ data, setData, fetching }) {
+function TableMain({
+  data,
+  setData,
+  fetching,
+  page,
+  rowsPerPage,
+  deleteHandler,
+}) {
   return (
     <Box sx={{ width: "99%", margin: "0.5rem 0" }}>
       <Paper
@@ -146,7 +157,7 @@ function TableMain({ data, setData, fetching }) {
                 </StyledTableCell>
               </TableRow>
             </TableHead>
-            {/* <TableBody>
+            <TableBody>
               {fetching === true ? (
                 <div
                   style={{
@@ -175,29 +186,29 @@ function TableMain({ data, setData, fetching }) {
                           style={{ cursor: "pointer" }}
                         >
                           <input
-                            checked={selected_users[page]?.includes(
-                              value?.username
-                            )}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setselected_users((prev) => {
-                                  return {
-                                    ...prev,
-                                    [page]: [
-                                      ...(prev[page] ? prev[page] : []),
-                                      value?.username,
-                                    ],
-                                  };
-                                });
-                              } else {
-                                setselected_users((prev) => {
-                                  const filtered = prev[page].filter(
-                                    (name) => name !== value.username
-                                  );
-                                  return { ...prev, [page]: filtered };
-                                });
-                              }
-                            }}
+                            // checked={selected_users[page]?.includes(
+                            //   value?.username
+                            // )}
+                            // onChange={(e) => {
+                            //   if (e.target.checked) {
+                            //     setselected_users((prev) => {
+                            //       return {
+                            //         ...prev,
+                            //         [page]: [
+                            //           ...(prev[page] ? prev[page] : []),
+                            //           value?.username,
+                            //         ],
+                            //       };
+                            //     });
+                            //   } else {
+                            //     setselected_users((prev) => {
+                            //       const filtered = prev[page].filter(
+                            //         (name) => name !== value.username
+                            //       );
+                            //       return { ...prev, [page]: filtered };
+                            //     });
+                            //   }
+                            // }}
                             type="checkbox"
                             name="select-users"
                             id=""
@@ -209,35 +220,14 @@ function TableMain({ data, setData, fetching }) {
                             onClick={() => openSidebar(value?.username)}
                             style={{ cursor: "pointer" }}
                           >
-                            <img
-                              src={
-                                value?.profile_pic
-                                  ? value.profile_pic
-                                  : "/images/logo2.png"
-                              }
-                              className="table-content-image"
-                            />
-
                             <div
                               className="campaign-page-table-content"
                               style={{
                                 textTransform: "none",
                                 cursor: "pointer",
                               }}
-                              onClick={() => openSidebar(value?.username)}
                             >
-                              {value?.full_name}
-                              <div
-                                className="list-insta-username"
-                                onClick={() =>
-                                  window.open(
-                                    `https://instagram.com/${value?.username}`,
-                                    "_blank"
-                                  )
-                                }
-                              >
-                                {"@"} {value?.username}
-                              </div>
+                              {value?.name}
                             </div>
                           </div>
                         </StyledTableCell>
@@ -247,7 +237,7 @@ function TableMain({ data, setData, fetching }) {
                           style={{ cursor: "pointer" }}
                         >
                           <div className="campaign-page-table-content">
-                            Email
+                            {value?.email}
                           </div>
                         </StyledTableCell>
                         <StyledTableCell
@@ -256,7 +246,7 @@ function TableMain({ data, setData, fetching }) {
                           style={{ cursor: "pointer" }}
                         >
                           <div className="campaign-page-table-content">
-                            Role
+                            {value?.role}
                           </div>
                         </StyledTableCell>
                         <StyledTableCell
@@ -264,14 +254,19 @@ function TableMain({ data, setData, fetching }) {
                           onClick={() => openSidebar(value?.username)}
                           style={{ cursor: "pointer" }}
                         >
-                          <div className="campaign-page-table-content">
-                            Icons
+                          <div className="campaign-page-table-content icons">
+                            <span className="icon-container">
+                              <FiEdit />
+                            </span>
+                            <span className="icon-container">
+                              <AiOutlineDelete size={18} />
+                            </span>
                           </div>
                         </StyledTableCell>
                       </StyledTableRow>
                     );
                   })}
-            </TableBody> */}
+            </TableBody>
           </Table>
         </TableContainer>
       </Paper>
