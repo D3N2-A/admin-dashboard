@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { StyledTableCell, StyledTableRow } from "../../Utils/MaterialUi";
 import { FiEdit } from "react-icons/fi";
 import "./index.css";
@@ -24,10 +24,21 @@ function TableMain({
   setSelectedUsers,
 }) {
   const deleteHandler = (id) => {
-    console.log(id);
     let temp = [...data];
     temp = temp.filter((x) => x.id !== id);
     setData((prev) => {
+      return temp;
+    });
+  };
+
+  const defaultEditState = { id: null, name: "", email: "", role: "" };
+  const [editState, setEditState] = useState(defaultEditState);
+
+  const editHandler = () => {
+    //Do Something
+    setData((prev) => {
+      let temp = [...prev];
+      temp.splice(editState.id, 1, { ...editState });
       return temp;
     });
   };
@@ -112,10 +123,7 @@ function TableMain({
                   id="campaign-brand-data-select-table-header"
                   align="left"
                 >
-                  <div
-                    className="campaign-table-cell-heading pointer"
-                    //   onClick={() => getSortedDataString("full_name")}
-                  >
+                  <div className="campaign-table-cell-heading pointer">
                     Name
                   </div>
                 </StyledTableCell>
@@ -127,10 +135,7 @@ function TableMain({
                   id="campaign-brand-data-select-table-header"
                   align="left"
                 >
-                  <div
-                    className="campaign-table-cell-heading pointer"
-                    // onClick={() => getSortedDataArray("tag")}
-                  >
+                  <div className="campaign-table-cell-heading pointer">
                     Email
                   </div>
                 </StyledTableCell>
@@ -142,10 +147,7 @@ function TableMain({
                   id="campaign-brand-data-select-table-header"
                   align="left"
                 >
-                  <div
-                    className="campaign-table-cell-heading pointer"
-                    // onClick={() => getSortedDataNum("growth_rate")}
-                  >
+                  <div className="campaign-table-cell-heading pointer">
                     Role
                   </div>
                 </StyledTableCell>
@@ -157,10 +159,7 @@ function TableMain({
                   id="campaign-brand-data-select-table-header"
                   align="left"
                 >
-                  <div
-                    className="campaign-table-cell-heading pointer"
-                    //   onClick={() => getSortedDataNum("engagement_rate")}
-                  >
+                  <div className="campaign-table-cell-heading pointer">
                     Actions
                   </div>
                 </StyledTableCell>
@@ -186,10 +185,7 @@ function TableMain({
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((value, index) => {
                     return (
-                      <StyledTableRow
-                        key={index}
-                        // onClick={() => openSidebar(value?.username)} style={{ cursor: "pointer" }}
-                      >
+                      <StyledTableRow key={index}>
                         <StyledTableCell
                           align="left"
                           style={{ cursor: "pointer" }}
@@ -226,11 +222,7 @@ function TableMain({
                           />
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          <div
-                            className="display-flex-row align-items-center"
-                            onClick={() => openSidebar(value?.username)}
-                            style={{ cursor: "pointer" }}
-                          >
+                          <div style={{ cursor: "pointer" }}>
                             <div
                               className="campaign-page-table-content"
                               style={{
@@ -238,26 +230,82 @@ function TableMain({
                                 cursor: "pointer",
                               }}
                             >
-                              {value?.name}
+                              {editState.id === value?.id ? (
+                                <input
+                                  type="text"
+                                  placeholder="Type New value and Press enter"
+                                  value={editState.name}
+                                  onChange={(e) => {
+                                    setEditState((prev) => {
+                                      return { ...prev, name: editState.name };
+                                    });
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                      editHandler();
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                `${value?.name}`
+                              )}
                             </div>
                           </div>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
-                          onClick={() => openSidebar(value?.username)}
                           style={{ cursor: "pointer" }}
                         >
                           <div className="campaign-page-table-content">
-                            {value?.email}
+                            {editState.id === value?.id ? (
+                              <input
+                                type="text"
+                                placeholder="Type New value and Press enter"
+                                value={editState.email}
+                                onChange={(e) => {
+                                  setEditState((prev) => {
+                                    return { ...prev, email: editState.email };
+                                  });
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    editHandler();
+                                  }
+                                }}
+                              />
+                            ) : (
+                              `${value?.email}`
+                            )}
                           </div>
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
-                          onClick={() => openSidebar(value?.username)}
                           style={{ cursor: "pointer" }}
                         >
                           <div className="campaign-page-table-content">
-                            {value?.role}
+                            {editState.id === value?.id ? (
+                              <select
+                                name=""
+                                value={editState.role}
+                                onChange={(e) => {
+                                  setEditState((prev) => {
+                                    return { ...prev, email: editState.email };
+                                  });
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    editHandler();
+                                  }
+                                }}
+                                id=""
+                              >
+                                <option value="">Please Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="member">Member</option>
+                              </select>
+                            ) : (
+                              `${value?.email}`
+                            )}
                           </div>
                         </StyledTableCell>
                         <StyledTableCell
@@ -265,7 +313,15 @@ function TableMain({
                           style={{ cursor: "pointer" }}
                         >
                           <div className="campaign-page-table-content icons">
-                            <span className="icon-container" id="edit">
+                            <span
+                              className="icon-container"
+                              id="edit"
+                              onClick={() => {
+                                setEditState((prev) => {
+                                  return { ...prev, id: value?.id };
+                                });
+                              }}
+                            >
                               <FiEdit />
                             </span>
                             <span
