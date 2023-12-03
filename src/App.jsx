@@ -49,14 +49,6 @@ function App() {
   // Selection and Deleteion
   const [selectedUsers, setSelectedUsers] = useState({});
 
-  const deleteHandler = (id) => {
-    let temp = [...data];
-    temp = temp.filter((x) => x.id !== id);
-    setData((prev) => {
-      return temp;
-    });
-  };
-
   return (
     <>
       <div className="container">
@@ -82,6 +74,8 @@ function App() {
           rowsPerPage={rowsPerPage}
           data={data}
           setData={setData}
+          selectedUsers={selectedUsers}
+          setSelectedUsers={setSelectedUsers}
         />
         <div className="footer">
           <TablePagination
@@ -90,11 +84,8 @@ function App() {
             count={data?.length}
             rowsPerPage={rowsPerPage}
             page={page}
-            selectedUsers={selectedUsers}
-            setSelectedUsers={setSelectedUsers}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            deleteHandler={deleteHandler}
           />
         </div>
       </div>

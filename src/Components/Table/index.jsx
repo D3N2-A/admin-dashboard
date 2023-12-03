@@ -20,8 +20,17 @@ function TableMain({
   fetching,
   page,
   rowsPerPage,
-  deleteHandler,
+  selectedUsers,
+  setSelectedUsers,
 }) {
+  const deleteHandler = (id) => {
+    console.log(id);
+    let temp = [...data];
+    temp = temp.filter((x) => x.id !== id);
+    setData((prev) => {
+      return temp;
+    });
+  };
   return (
     <Box sx={{ width: "99%", margin: "0.5rem 0" }}>
       <Paper
@@ -42,46 +51,46 @@ function TableMain({
                 >
                   <div className="campaign-table-cell-heading pointer">
                     <input
-                      //   checked={
-                      //     data?.length > 0
-                      //       ? data
-                      //           ?.slice(
-                      //             page * rowsPerPage,
-                      //             page * rowsPerPage + rowsPerPage
-                      //           )
-                      //           ?.every((val) =>
-                      //             selected_users[page]?.includes(val.username)
-                      //           )
-                      //       : false
-                      //   }
+                      checked={
+                        data?.length > 0
+                          ? data
+                              ?.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                              ?.every((val) =>
+                                selectedUsers[page]?.includes(val.id)
+                              )
+                          : false
+                      }
                       type="checkbox"
-                      //   onChange={(e) => {
-                      //     if (e.target.checked) {
-                      //       setselected_users((prev) => {
-                      //         // const all = [...prev];
-                      //         const usernames = data
-                      //           ?.slice(
-                      //             page * rowsPerPage,
-                      //             page * rowsPerPage + rowsPerPage
-                      //           )
-                      //           .map((x) => x?.username);
-                      //         return { ...prev, [page]: usernames };
-                      //       });
-                      //     } else {
-                      //       setselected_users((prev) => {
-                      //         const usernames = data
-                      //           ?.slice(
-                      //             page * rowsPerPage,
-                      //             page * rowsPerPage + rowsPerPage
-                      //           )
-                      //           .map((x) => x?.username);
-                      //         const intersection = { ...prev }[page].filter(
-                      //           (x) => !usernames.includes(x)
-                      //         );
-                      //         return { ...prev, [page]: intersection };
-                      //       });
-                      //     }
-                      //   }}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedUsers((prev) => {
+                            // const all = [...prev];
+                            const id = data
+                              ?.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                              .map((x) => x?.id);
+                            return { ...prev, [page]: id };
+                          });
+                        } else {
+                          setSelectedUsers((prev) => {
+                            const id = data
+                              ?.slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                              .map((x) => x?.id);
+                            const intersection = { ...prev }[page].filter(
+                              (x) => !id.includes(x)
+                            );
+                            return { ...prev, [page]: intersection };
+                          });
+                        }
+                      }}
                       style={{
                         width: "15px",
                         height: "15px",
@@ -186,29 +195,31 @@ function TableMain({
                           style={{ cursor: "pointer" }}
                         >
                           <input
-                            // checked={selected_users[page]?.includes(
-                            //   value?.username
-                            // )}
-                            // onChange={(e) => {
-                            //   if (e.target.checked) {
-                            //     setselected_users((prev) => {
-                            //       return {
-                            //         ...prev,
-                            //         [page]: [
-                            //           ...(prev[page] ? prev[page] : []),
-                            //           value?.username,
-                            //         ],
-                            //       };
-                            //     });
-                            //   } else {
-                            //     setselected_users((prev) => {
-                            //       const filtered = prev[page].filter(
-                            //         (name) => name !== value.username
-                            //       );
-                            //       return { ...prev, [page]: filtered };
-                            //     });
-                            //   }
-                            // }}
+                            checked={
+                              selectedUsers[page]
+                                ? selectedUsers[page]?.includes(value?.id)
+                                : false
+                            }
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedUsers((prev) => {
+                                  return {
+                                    ...prev,
+                                    [page]: [
+                                      ...(prev[page] ? prev[page] : []),
+                                      value?.username,
+                                    ],
+                                  };
+                                });
+                              } else {
+                                setselected_users((prev) => {
+                                  const filtered = prev[page].filter(
+                                    (name) => name !== value.username
+                                  );
+                                  return { ...prev, [page]: filtered };
+                                });
+                              }
+                            }}
                             type="checkbox"
                             name="select-users"
                             id=""
@@ -251,14 +262,19 @@ function TableMain({
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
-                          onClick={() => openSidebar(value?.username)}
                           style={{ cursor: "pointer" }}
                         >
                           <div className="campaign-page-table-content icons">
-                            <span className="icon-container">
+                            <span className="icon-container" id="edit">
                               <FiEdit />
                             </span>
-                            <span className="icon-container">
+                            <span
+                              className="icon-container"
+                              id="delete"
+                              onClick={() => {
+                                deleteHandler(value?.id);
+                              }}
+                            >
                               <AiOutlineDelete size={18} />
                             </span>
                           </div>
